@@ -1,0 +1,123 @@
+// ...existing code...
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Login</h1>
+
+        <form id="loginForm" action="dashboard.html" method="GET" novalidate>
+            <input id="email" type="email" name="email" placeholder="Enter your Email" required>
+            <p id="email-error" style="color:red;display:none;margin:6px 0;font-size:14px;">Please enter a valid Gmail address (example@gmail.com).</p>
+
+            <div class="password-field">
+                <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+                <span class="eye-icon" onclick="togglePassword()" style="cursor:pointer">👀</span>
+            </div>
+            <p id="auth-error" style="color:red;display:none;margin:6px 0;font-size:14px;"></p>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <a class="forgot-link" href="forgot.html">Forgot Password?</a>
+        <p class="signup-text">
+            Don't have an account??🤔
+            <a href="signup.html">Sign up</a>
+        </p>
+    </div>
+
+<script>
+    // Toggle password visibility
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+    }
+
+    // Accept only gmail.com / googlemail.com (prevent typos like "gmaill.com")
+    const gmailOnlyRegex = /^[a-zA-Z0-9._%+-]+@(?:gmail\.com|googlemail\.com)$/i;
+
+    const form = document.getElementById('loginForm');
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const emailErrorEl = document.getElementById('email-error');
+    const authErrorEl = document.getElementById('auth-error');
+
+    // live validation: trim + lowercase check for gmail domain
+    emailEl.addEventListener('input', () => {
+        const v = (emailEl.value || '').trim().toLowerCase();
+        if (!v || gmailOnlyRegex.test(v)) {
+            emailErrorEl.style.display = 'none';
+        } else {
+            emailErrorEl.style.display = 'block';
+            emailErrorEl.textContent = 'Please enter a valid Gmail address (example@gmail.com).';
+        }
+    });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        emailErrorEl.style.display = 'none';
+        authErrorEl.style.display = 'none';
+
+        const email = (emailEl.value || '').trim().toLowerCase();
+        const password = (passwordEl.value || '');
+
+        // 1) Require gmail address only
+        if (!email || !gmailOnlyRegex.test(email)) {
+            emailErrorEl.style.display = 'block';
+            emailErrorEl.textContent = 'Please enter a valid Gmail address (example@gmail.com).';
+            emailEl.focus();
+            return;
+        }
+
+        // 2) Require password
+        if (!password) {
+            authErrorEl.style.display = 'block';
+            authErrorEl.textContent = 'Please enter your password.';
+            passwordEl.focus();
+            return;
+        }
+
+        // 3) If signup stored credentials in localStorage, compare normalized values
+        const storedUserJson = localStorage.getItem('signupData') || localStorage.getItem('registeredUser') || localStorage.getItem('career_guidance_user');
+        if (storedUserJson) {
+            try {
+                const user = JSON.parse(storedUserJson);
+                const savedEmail = (user.email || user.emailAddress || '').toString().trim().toLowerCase();
+                const savedPassword = (user.password || '').toString();
+
+                if (savedEmail) {
+                    if (savedEmail !== email) {
+                        authErrorEl.style.display = 'block';
+                        authErrorEl.textContent = 'Email does not match a registered account.';
+                        emailEl.focus();
+                        return;
+                    }
+                    if (savedPassword && savedPassword !== password) {
+                        authErrorEl.style.display = 'block';
+                        authErrorEl.textContent = 'Incorrect password.';
+                        passwordEl.focus();
+                        return;
+                    }
+                    // credentials matched -> submit
+                    form.submit();
+                    return;
+                }
+            } catch (err) {
+                // ignore parse errors and continue to fallback
+            }
+        }
+
+        // 4) Fallback: if no stored account, allow demo submit (remove this to force registration)
+        form.submit();
+    });
+</script>
+
+</body>
+</html>
+// ...existing code...

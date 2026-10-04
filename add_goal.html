@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Add New Goal | CareerCanvas</title>
+  <style>
+    :root{
+      --bg-1: #0b1220;
+      --bg-2: #0f1724;
+      --accent: #6EE7B7;
+      --muted: rgba(255,255,255,0.90);
+      --glass-border: rgba(255,255,255,0.06);
+      --radius: 14px;
+      --shadow: 0 12px 40px rgba(2,6,23,0.6);
+      --font-sans: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;width:100%}
+
+    body{
+      font-family:var(--font-sans);
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(110,231,183,0.06), transparent 8%),
+        radial-gradient(800px 400px at 90% 90%, rgba(110,231,183,0.03), transparent 6%),
+        linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      color:var(--muted);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      position:relative;
+    }
+
+    /* Left brand panel */
+    .side-brand{
+      position:fixed;
+      left:28px;
+      top:28px;
+      width:220px;
+      height:calc(100vh - 56px);
+      background: linear-gradient(180deg, rgba(110,231,183,0.04), rgba(110,231,183,0.01));
+      border-radius:var(--radius);
+      border:1px solid rgba(110,231,183,0.06);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      box-shadow:var(--shadow);
+      color:var(--accent);
+      align-items:flex-start;
+      z-index:60;
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+    .side-brand .logo{width:64px;height:64px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;color:#042;background:linear-gradient(90deg,#6EE7B7,#34D399);box-shadow:0 8px 20px rgba(16,24,32,0.45)}
+    .side-brand h2{font-size:20px;margin-top:8px;color:var(--accent)}
+    .side-brand p{color:rgba(255,255,255,0.9);font-size:13px;line-height:1.2}
+    .side-brand small{color:rgba(255,255,255,0.7);margin-top:auto}
+    .side-brand a{display:block;color:var(--muted);padding:10px 12px;text-decoration:none;border-radius:8px;font-size:13px;transition:background 0.2s, color 0.2s}
+    .side-brand a:hover{background:rgba(110,231,183,0.08);color:var(--accent)}
+
+    /* Top controls */
+    .top-bar{position:fixed;right:28px;top:28px;display:flex;gap:12px;align-items:center;z-index:70}
+    .home-btn{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:linear-gradient(90deg, rgba(110,231,183,0.12), rgba(110,231,183,0.06));color:var(--accent);text-decoration:none;font-weight:700;border:1px solid rgba(110,231,183,0.08);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
+    .profile-wrapper{position:relative}
+    .profile-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;background:linear-gradient(135deg,#ffffff,#e6fff5);color:#042;border:2px solid rgba(255,255,255,0.12);box-shadow:0 8px 24px rgba(2,6,23,0.5);cursor:pointer}
+    .profile-dropdown{display:none;position:absolute;right:0;top:62px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));padding:14px;border-radius:12px;min-width:240px;border:1px solid var(--glass-border);box-shadow:var(--shadow);backdrop-filter:blur(6px);color:var(--muted);z-index:100}
+
+    .main{width:100%;max-width:1100px;margin-left:260px;padding:40px 28px;box-sizing:border-box}
+    h1{color:var(--accent);font-size:28px;margin-bottom:16px;font-weight:800}
+    .sub{color:rgba(255,255,255,0.85);margin-bottom:20px;font-size:14px}
+    .form-container{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);border-radius:var(--radius);padding:30px;box-shadow:0 8px 30px rgba(2,6,23,0.45);backdrop-filter: blur(6px);max-width:600px;margin:0 auto}
+    label{display:block;margin-top:16px;margin-bottom:8px;color:var(--muted);font-weight:600;font-size:14px}
+
+    /* Use consistent input styling same as other features */
+    input,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(2,6,23,0.08);background:rgba(255,255,255,0.02);color:var(--muted);font-family:inherit;font-size:14px;margin-bottom:12px;transition: border-color 0.2s, background 0.2s;box-sizing:border-box}
+    input:focus,textarea:focus{outline:none;border-color:rgba(110,231,183,0.3);background:rgba(255,255,255,0.03)}
+    textarea{resize:vertical;min-height:100px}
+    .success-message{background:linear-gradient(90deg, rgba(40,167,69,0.12), rgba(40,167,69,0.06));color:#6EE7B7;padding:12px 14px;text-align:center;border-radius:8px;margin-bottom:16px;display:none;font-weight:600;cursor:pointer;border:1px solid rgba(110,231,183,0.2)}
+    .view-link{text-align:center;margin-top:16px}
+    .view-link a{color:var(--accent);text-decoration:none;font-weight:600}
+
+    /* Goal-title: input + dropdown that filters while typing.
+       Dropdown background set to var(--bg-1) to match career_suggestions select popup.
+       Input styling aligned with other inputs above. */
+    .goal-row{display:flex;gap:8px;align-items:center;position:relative}
+    .goal-input{flex:1;padding:12px;border-radius:8px;border:1px solid rgba(2,6,23,0.08);background:rgba(255,255,255,0.02);color:var(--muted);box-sizing:border-box}
+    .goal-choose-btn{padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(2,6,23,0.08);color:var(--muted);cursor:pointer}
+    .goal-dropdown{position:absolute;left:0;right:0;top:calc(100% + 10px);background:var(--bg-1);color:var(--muted);border-radius:8px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(2,6,23,0.5);z-index:200;display:none;max-height:220px;overflow:auto;padding:6px}
+    .goal-dropdown ul{list-style:none;margin:0;padding:0}
+    .goal-dropdown li{padding:10px 12px;border-radius:6px;cursor:pointer;color:var(--muted);background:var(--bg-1);outline:none}
+    .goal-dropdown li:hover,.goal-dropdown li[aria-selected="true"]{background:rgba(255,255,255,0.03)}
+    .goal-dropdown .no-match{padding:10px 12px;color:rgba(255,255,255,0.6)}
+    /* subtle scrollbar */
+    .goal-dropdown::-webkit-scrollbar{width:10px}
+    .goal-dropdown::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.04);border-radius:8px}
+    @media(max-width:900px){
+      .side-brand{display:none}
+      .main{margin-left:0}
+      .goal-dropdown{left:0;right:0;position:static;top:auto;margin-top:8px}
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="side-brand" aria-label="App brand">
+    <div class="logo">CG</div>
+    <h2>CareerCanvas</h2>
+    <p>Design your path — build your future.</p>
+    <small style="margin-top:auto">Resume · Internships · Roadmaps</small>
+    <div style="width:100%;border-top:1px solid rgba(110,231,183,0.1);margin:12px 0;"></div>
+    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="add_goal.html">➕ Add Goal</a>
+    <a href="goals_list.html">📋 View Goals</a>
+    <a href="career_suggestions.html">💡 Career Suggestions</a>
+    <a href="roadmap_generator.html">🛣️ Roadmap</a>
+    <a href="skills_recommendation.html">🎯 Skills</a>
+    <a href="project_ideas.html">🚀 Projects</a>
+    <a href="internship_alerts.html">💼 Internships</a>
+  </aside>
+
+  <div class="top-bar">
+    
+    <div class="profile-wrapper">
+      <div class="profile-circle" onclick="toggleProfile()" id="profileBtn">A</div>
+      <div class="profile-dropdown" id="profileDropdown" aria-hidden="true">
+        <p><strong>Name:</strong> <span id="profileName">User</span></p>
+        <p><strong>Email:</strong> <span id="profileEmail">user@example.com</span></p>
+      </div>
+    </div>
+  </div>
+
+  <main class="main">
+    <h1>➕ Add a New Goal</h1>
+    <div class="sub">Set a new career goal and track your progress</div>
+
+    <div class="success-message" id="successMessage">✅ Goal added successfully!</div>
+
+    <div class="form-container">
+      <form id="goalForm" autocomplete="off">
+        <label for="goal_title">Goal Title</label>
+        <div class="goal-row">
+          <input type="text" id="goal_title" name="goal_title" class="goal-input" placeholder="e.g. Learn Python" autocomplete="off" />
+          <button type="button" id="showGoalsBtn" class="goal-choose-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="goalList">▼</button>
+
+          <div class="goal-dropdown" id="goalDropdown" role="listbox" aria-label="Saved goals">
+            <ul id="goalList"></ul>
+          </div>
+        </div>
+
+        <label for="goal">Description</label>
+        <textarea id="goal" name="goal" placeholder="e.g. Complete 5 projects and build portfolio" required></textarea>
+
+        <label for="deadline">Deadline</label>
+        <input type="date" id="deadline" name="deadline" required />
+
+        
+
+        <div class="view-link">
+          <a href="goals_list.html">📋 View My Goals</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    /* profile helpers */
+    function populateProfile() {
+      const name = localStorage.getItem('userName') || 'User';
+      const email = localStorage.getItem('userEmail') || 'user@example.com';
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileEmail').textContent = email;
+      const initial = name ? name.trim()[0].toUpperCase() : 'U';
+      document.getElementById('profileBtn').textContent = initial;
+    }
+    function toggleProfile() {
+      const dd = document.getElementById('profileDropdown');
+      const visible = dd.style.display === 'block';
+      dd.style.display = visible ? 'none' : 'block';
+      dd.setAttribute('aria-hidden', visible ? 'true' : 'false');
+    }
+    document.addEventListener('click', (e) => {
+      const wrapper = document.querySelector('.profile-wrapper');
+      const dd = document.getElementById('profileDropdown');
+      if (!wrapper.contains(e.target)) {
+        dd.style.display = 'none';
+        dd.setAttribute('aria-hidden','true');
+      }
+    });
+    document.addEventListener('DOMContentLoaded', populateProfile);
+
+    /* Goal-dropdown behaviour: allow typing + show filtered options */
+    const showBtn = document.getElementById('showGoalsBtn');
+    const dropdown = document.getElementById('goalDropdown');
+    const goalListEl = document.getElementById('goalList');
+    const goalInput = document.getElementById('goal_title');
+    const successMsg = document.getElementById('successMessage');
+
+    function getSavedGoals() {
+      const saved = localStorage.getItem('savedGoals');
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e){ /* ignore corrupt data */ }
+      }
+      return ["Learn Python","Build Portfolio","Master React","Get Internship","Prepare for Interviews"];
+    }
+    function setSavedGoals(arr){
+      localStorage.setItem('savedGoals', JSON.stringify(arr.slice(0,100)));
+    }
+
+    let filteredGoals = [];
+    let keyboardIndex = -1;
+
+    function renderDropdown(filter='') {
+      const goals = getSavedGoals();
+      const f = filter.trim().toLowerCase();
+      filteredGoals = goals.filter(g => g.toLowerCase().includes(f));
+      goalListEl.innerHTML = '';
+      if (!filteredGoals.length) {
+        const no = document.createElement('div');
+        no.className = 'no-match';
+        no.textContent = 'No matches';
+        goalListEl.appendChild(no);
+        keyboardIndex = -1;
+        return;
+      }
+      filteredGoals.forEach((g, idx) => {
+        const li = document.createElement('li');
+        li.textContent = g;
+        li.tabIndex = 0;
+        li.setAttribute('role','option');
+        li.dataset.index = idx;
+        li.addEventListener('click', () => selectItem(idx));
+        li.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectItem(idx); }
+        });
+        goalListEl.appendChild(li);
+      });
+      keyboardIndex = -1;
+      updateAriaSelection();
+    }
+
+    function openDropdown() {
+      renderDropdown(goalInput.value || '');
+      dropdown.style.display = 'block';
+      showBtn.setAttribute('aria-expanded','true');
+    }
+    function closeDropdown() {
+      dropdown.style.display = 'none';
+      showBtn.setAttribute('aria-expanded','false');
+      keyboardIndex = -1;
+      updateAriaSelection();
+    }
+
+    function selectItem(idx){
+      if (!filteredGoals[idx]) return;
+      goalInput.value = filteredGoals[idx];
+      closeDropdown();
+      goalInput.focus();
+    }
+
+    function updateAriaSelection(){
+      const items = goalListEl.querySelectorAll('li');
+      items.forEach(li => li.removeAttribute('aria-selected'));
+      if (keyboardIndex >= 0 && items[keyboardIndex]) {
+        items[keyboardIndex].setAttribute('aria-selected','true');
+        items[keyboardIndex].scrollIntoView({block:'nearest'});
+      }
+    }
+
+    showBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (dropdown.style.display === 'block') closeDropdown();
+      else openDropdown();
+    });
+
+    goalInput.addEventListener('focus', () => { openDropdown(); });
+    goalInput.addEventListener('input', (e) => {
+      renderDropdown(e.target.value || '');
+      if (dropdown.style.display !== 'block') dropdown.style.display = 'block';
+    });
+
+    goalInput.addEventListener('keydown', (e) => {
+      const items = goalListEl.querySelectorAll('li');
+      if (dropdown.style.display !== 'block' && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) openDropdown();
+      if (!items.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        keyboardIndex = Math.min(keyboardIndex + 1, items.length - 1);
+        updateAriaSelection();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        keyboardIndex = Math.max(0, keyboardIndex - 1);
+        updateAriaSelection();
+      } else if (e.key === 'Enter') {
+        if (keyboardIndex >= 0) { e.preventDefault(); selectItem(keyboardIndex); }
+      } else if (e.key === 'Escape') {
+        closeDropdown();
+      }
+    });
+
+    // close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const isInside = dropdown.contains(e.target) || e.target === showBtn || e.target === goalInput;
+      if (!isInside) closeDropdown();
+    });
+
+    // Submit handler: keeps original behaviour and also persists title to savedGoals
+    document.getElementById('goalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = this;
+      const formData = new FormData(form);
+
+      fetch('add_goal.php', { method: 'POST', body: formData })
+        .then(response => response.text())
+        .then(data => {
+          successMsg.style.display = 'block';
+          // persist the title so dropdown shows it next time
+          const title = (formData.get('goal_title') || '').toString().trim();
+          if (title) {
+            const saved = getSavedGoals();
+            if (!saved.includes(title)) {
+              saved.unshift(title);
+              setSavedGoals(saved);
+            }
+          }
+          form.reset();
+          setTimeout(() => { successMsg.style.display = 'none'; }, 2000);
+        })
+        .catch(err => {
+          alert("❌ Something went wrong. Please try again.");
+        });
+    });
+
+    successMsg.addEventListener('click', () => { successMsg.style.display = 'none'; });
+
+    // initialize dropdown contents (hidden)
+    document.addEventListener('DOMContentLoaded', () => { renderDropdown(''); });
+  </script>
+
+</body>
+</html>

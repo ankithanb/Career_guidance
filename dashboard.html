@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CareerCanvas — Dashboard</title>
+  <style>
+    :root{
+      --bg-1: #0b1220;
+      --bg-2: #0f1724;
+      --accent: #6EE7B7;
+      --muted: rgba(255,255,255,0.85);
+      --glass-border: rgba(255,255,255,0.06);
+      --radius: 14px;
+      --shadow: 0 12px 40px rgba(2,6,23,0.6);
+      --font-sans: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;width:100%}
+    body{
+      font-family:var(--font-sans);
+      color:var(--muted);
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(110,231,183,0.06), transparent 8%),
+        radial-gradient(800px 400px at 90% 90%, rgba(110,231,183,0.03), transparent 6%),
+        linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      position:relative;
+    }
+
+    /* Top right controls */
+    .top-bar{
+      position:fixed;
+      right:28px;
+      top:28px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      z-index:70;
+    }
+    .home-btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 14px;border-radius:12px;
+      background:linear-gradient(90deg, rgba(110,231,183,0.12), rgba(110,231,183,0.06));
+      color:var(--accent);text-decoration:none;font-weight:700;border:1px solid rgba(110,231,183,0.08);
+      box-shadow:0 8px 20px rgba(0,0,0,0.35);transition:transform .12s ease,box-shadow .12s ease;
+    }
+    .home-btn:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,0.45)}
+    .home-icon{background:rgba(110,231,183,0.95);color:#042;padding:6px;border-radius:6px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+
+    .profile-wrapper{position:relative}
+    .profile-circle{
+      width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-weight:700;background:linear-gradient(135deg,#ffffff,#e6fff5);color:#042;border:2px solid rgba(255,255,255,0.12);
+      box-shadow:0 8px 24px rgba(2,6,23,0.5);cursor:pointer;
+    }
+    .profile-dropdown{
+      display:none;position:absolute;right:0;top:62px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));
+      padding:14px;border-radius:12px;min-width:240px;border:1px solid var(--glass-border);box-shadow:var(--shadow);backdrop-filter:blur(6px);
+      color:var(--muted);
+      z-index:100;
+    }
+    .profile-dropdown p{font-size:14px;margin:8px 0;color:var(--muted)}
+
+    /* Left brand panel */
+    .side-brand{
+      position:fixed;
+      left:28px;
+      top:28px;
+      width:220px;
+      height:calc(100vh - 56px);
+      background: linear-gradient(180deg, rgba(110,231,183,0.04), rgba(110,231,183,0.01));
+      border-radius:var(--radius);
+      border:1px solid rgba(110,231,183,0.06);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      box-shadow:var(--shadow);
+      color:var(--accent);
+      align-items:flex-start;
+      z-index:60;
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+    .side-brand .logo{
+      width:64px;height:64px;border-radius:12px;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:22px;color:#042;
+      background:linear-gradient(90deg,#6EE7B7,#34D399);
+      box-shadow:0 8px 20px rgba(16,24,32,0.45);
+    }
+    .side-brand h2{font-size:20px;margin-top:8px;color:var(--accent);margin-bottom:4px}
+    .side-brand p{color:rgba(255,255,255,0.9);font-size:13px;line-height:1.4;margin:0}
+    .side-brand small{color:rgba(255,255,255,0.7);margin-top:auto;font-size:12px}
+
+    /* Main area */
+    .main{
+      width:100%;
+      max-width:1100px;
+      margin-left:260px;
+      padding:40px 28px;
+      box-sizing:border-box;
+    }
+
+    h1{color:var(--accent);font-size:28px;margin-bottom:8px;font-weight:800}
+    .sub{color:rgba(255,255,255,0.85);margin-bottom:28px;font-size:14px}
+
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:24px;
+      width:100%;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;padding:24px;border:1px solid var(--glass-border);
+      box-shadow:0 8px 30px rgba(2,6,23,0.45);transition:transform .24s ease,box-shadow .24s ease;
+      display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+    }
+    .card:hover{transform:translateY(-8px);box-shadow:0 18px 48px rgba(2,6,23,0.6)}
+    
+    .card .icon{
+      font-size:32px;
+      display:block;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    }
+    .card h3{margin:0;color:var(--accent);font-size:18px;font-weight:700}
+    .card p{margin:0;color:rgba(255,255,255,0.8);font-size:13px;line-height:1.5}
+    .card a{
+      margin-top:auto;display:inline-block;padding:10px 16px;border-radius:10px;background:var(--accent);color:#042;text-decoration:none;font-weight:700;
+      box-shadow:0 8px 24px rgba(6,22,18,0.12);transition:all 0.2s ease;
+    }
+    .card a:hover{transform:scale(1.05)}
+
+    .footer-note{margin-top:28px;color:rgba(255,255,255,0.65);font-size:13px;text-align:center}
+
+    @media(max-width:1200px){
+      .dashboard-grid{
+        grid-template-columns:repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:900px){
+      .side-brand{display:none}
+      .main{margin-left:0;padding:28px 20px}
+      .dashboard-grid{
+        grid-template-columns:repeat(2, 1fr);
+        gap:18px;
+      }
+    }
+
+    @media(max-width:640px){
+      .dashboard-grid{
+        grid-template-columns:1fr;
+      }
+      h1{font-size:24px}
+      .card{padding:18px}
+      .home-btn{padding:8px 10px;font-size:13px}
+      .profile-circle{width:42px;height:42px;font-size:16px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left brand panel -->
+  <aside class="side-brand" aria-label="App brand">
+    <div class="logo">CG</div>
+    <h2>CareerCanvas</h2>
+    <p>Design your path — build your future.</p>
+    <small>Resume · Internships · Roadmaps</small>
+  </aside>
+
+  <!-- Top-right controls -->
+  <div class="top-bar" role="navigation" aria-label="Top controls">
+    <a class="home-btn" href="frontpage.html" title="Go Home">
+      <span class="home-icon">🏠</span>
+      <span>Home</span>
+    </a>
+
+    <div class="profile-wrapper" aria-haspopup="true">
+      <div class="profile-circle" id="profileBtn" onclick="toggleProfile()">A</div>
+      <div class="profile-dropdown" id="profileDropdown" aria-hidden="true">
+        <p><strong>Name:</strong> <span id="profileName">Ankitha</span></p>
+        <p><strong>Email:</strong> <span id="profileEmail">ankitha@example.com</span></p>
+        <p><strong>Role:</strong> <span id="profileRole">Student</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <main class="main">
+    <h1 id="welcomeTitle">Welcome to CareerCanvas</h1>
+    <div class="sub">Build resumes, discover internships, and accelerate your career growth</div>
+
+    <section class="dashboard-grid" aria-label="Dashboard features">
+      
+      <article class="card">
+        <span class="icon">➕</span>
+        <h3>Add New Goal</h3>
+        <p>Create and set new career goals to stay focused and motivated.</p>
+        <a href="add_goal.html">Add Goal</a>
+      </article>
+
+      <article class="card">
+        <span class="icon">📋</span>
+        <h3>Goals & Progress</h3>
+        <p>Manage personal goals and track your progress effectively.</p>
+        <a href="goals_list.html">Manage Goals</a>
+      </article>
+
+      <article class="card">
+        <span class="icon">🛣️</span>
+        <h3>Roadmap Generator</h3>
+        <p>Generate step-by-step learning roadmaps for your career path.</p>
+        <a href="roadmap_generator.html">Generate</a>
+      </article>
+
+      <article class="card">
+        <span class="icon">📄</span>
+        <h3>Resume Builder</h3>
+        <p>Create professional resumes with multiple templates and download as PDF.</p>
+        <a href="resume_builder.html">Open Builder</a>
+      </article>
+
+      <article class="card">
+        <span class="icon">💼</span>
+        <h3>Internship Alerts</h3>
+        <p>Browse curated internship opportunities across different domains.</p>
+        <a href="internship_alerts.html">Explore Now</a>
+      </article>
+
+      
+
+      <article class="card">
+        <span class="icon">🎯</span>
+        <h3>Skills Recommendation</h3>
+        <p>Get skill recommendations tailored to your career goals.</p>
+        <a href="skills_recommendation.html">View Skills</a>
+      </article>
+
+      <article class="card">
+        <span class="icon">🚀</span>
+        <h3>Project Ideas</h3>
+        <p>Discover project ideas to build and enhance your portfolio.</p>
+        <a href="project_ideas.html">Browse Ideas</a>
+      </article>
+
+      
+
+    </section>
+
+    
+  </main>
+
+  <script>
+    function populateProfile() {
+      const name = localStorage.getItem('userName') || 'Ankitha';
+      const email = localStorage.getItem('userEmail') || 'ankitha@example.com';
+      const role = localStorage.getItem('userRole') || 'Student';
+
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileEmail').textContent = email;
+      document.getElementById('profileRole').textContent = role;
+      document.getElementById('footerEmail').textContent = email;
+      
+      const initial = name ? name.trim()[0].toUpperCase() : 'A';
+      document.getElementById('profileBtn').textContent = initial;
+      
+      const firstName = name.split(' ')[0];
+      document.getElementById('welcomeTitle').textContent = `Welcome, ${firstName}`;
+    }
+
+    function toggleProfile() {
+      const dd = document.getElementById('profileDropdown');
+      const isOpen = dd.style.display === 'block';
+      dd.style.display = isOpen ? 'none' : 'block';
+      dd.setAttribute('aria-hidden', String(isOpen));
+    }
+
+    window.addEventListener('click', (e) => {
+      const wrapper = document.querySelector('.profile-wrapper');
+      const dd = document.getElementById('profileDropdown');
+      if (!wrapper.contains(e.target)) {
+        dd.style.display = 'none';
+        dd.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', populateProfile);
+  </script>
+
+</body>
+</html>

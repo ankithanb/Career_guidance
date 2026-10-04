@@ -1,0 +1,26 @@
+<!-- Top Header -->
+  <div class="header">
+    <h1>Welcome to Dashboard</h1>
+    <div class="profile-wrapper">
+      <div class="profile-circle" onclick="toggleProfile()">A</div>
+      <div class="profile-dropdown" id="profileDropdown">
+        <p><strong>Name:</strong> Ankitha</p>
+        <p><strong>Email:</strong> ankitha@example.com</p>
+        <p><strong>Role:</strong> Student</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    function toggleProfile() {
+      const dropdown = document.getElementById('profileDropdown');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Hide profile dropdown if clicked outside
+    window.addEventListener('click', function (e) {
+      const profile = document.querySelector('.profile-wrapper');
+      if (!profile.contains(e.target)) {
+        document.getElementById('profileDropdown').style.display = 'none';
+      }
+    });
+  </script>

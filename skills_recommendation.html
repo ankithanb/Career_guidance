@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skills Recommendation System</title>
+    <style>
+      :root{
+        --bg-1: #0b1220;
+        --bg-2: #0f1724;
+        --accent: #34D399;
+        --muted: rgba(249, 243, 243, 0.815);
+        --glass-border: rgba(255,255,255,0.06);
+        --radius: 14px;
+        --shadow: 0 12px 40px rgba(2,6,23,0.6);
+        --font-sans: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+
+        --select-bg: linear-gradient(180deg,#0b1220 0%, #0f1724 100%);
+        --select-solid: #0b1220;
+        --select-color: rgba(236, 227, 227, 0.715);
+      }
+
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+      *{box-sizing:border-box;margin:0;padding:0}
+      html,body{height:100%;width:100%}
+
+      body{
+        font-family:var(--font-sans);
+        color:var(--muted);
+        min-height:100vh;
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        position:relative;
+        background:
+          radial-gradient(1200px 600px at 10% 10%, rgba(110,231,183,0.06), transparent 8%),
+          radial-gradient(800px 400px at 90% 90%, rgba(99,102,241,0.03), transparent 6%),
+          linear-gradient(180deg,var(--bg-1),var(--bg-2));
+        background-attachment: fixed;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+      }
+
+      /* Sidebar (project-ideas style) */
+      .sidebar{
+        position:fixed;
+        left:24px;
+        top:24px;
+        width:220px;
+        height:calc(100vh - 48px);
+        background: linear-gradient(180deg, rgba(110,231,183,0.04), rgba(110,231,183,0.01));
+        border-radius:var(--radius);
+        border:1px solid var(--glass-border);
+        padding:20px;
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        box-shadow:var(--shadow);
+        color:var(--accent);
+        z-index:60;
+        backdrop-filter: blur(6px) saturate(120%);
+        font-weight:600;
+      }
+      .sidebar .logo{
+        width:56px;height:56px;border-radius:10px;
+        display:inline-flex;align-items:center;justify-content:center;
+        font-weight:800;font-size:20px;color:rgb(28, 29, 28);
+        background:linear-gradient(90deg,#34D399,#34D399);
+        box-shadow:0 8px 20px rgba(16,24,32,0.45);
+        margin-bottom:6px;
+      }
+      .sidebar h2{font-size:18px;margin:0 0 4px 0;color:var(--accent);font-weight:800}
+      .sidebar p{font-size:13px;color:rgba(238, 226, 226, 0.87);margin-bottom:6px}
+      .sidebar a{
+        display:block;color:var(--muted);padding:8px 10px;text-decoration:none;border-radius:8px;font-size:13px;
+        transition:background .15s,color .15s,transform .12s;margin-top:6px;
+      }
+      .sidebar a:hover{background:rgba(110,231,183,0.08);color:var(--accent);transform:translateY(-2px)}
+
+      /* Main content */
+      .content{
+        width:100%;
+        max-width:1100px;
+        margin-left:272px; /* sidebar width + gap */
+        padding:40px 28px;
+        box-sizing:border-box;
+      }
+
+      .page-title{color:var(--accent);font-size:28px;margin-bottom:8px;font-weight:800}
+      .form-container{
+        margin-top:18px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+        border-radius:12px;
+        border:1px solid rgba(255,255,255,0.03);
+        padding:18px;
+        box-shadow:0 8px 30px rgba(2,6,23,0.25);
+      }
+
+      label { display:block;margin-top:15px;margin-bottom:5px;color:rgba(245, 241, 241, 0.85);font-weight:600 }
+
+      /* branch select: match page dark background and option popup */
+      .branch-select{
+        width:100%;
+        padding:12px;
+        border-radius:8px;
+        border:1px solid rgba(2,6,23,0.08);
+        background: var(--select-bg);
+        color: var(--select-color);
+        -webkit-appearance: none;
+        appearance: none;
+        outline: none;
+      }
+      .branch-select option{
+        background-color: var(--select-solid) !important;
+        color: var(--select-color) !important;
+      }
+
+      button {
+        margin-top:10px;
+        width:100%;
+        padding:14px;
+        background:linear-gradient(90deg,var(--accent),#34D399);
+        color:#042;
+        font-size:16px;
+        font-weight:800;
+        border:none;
+        border-radius:10px;
+        cursor:pointer;
+      }
+      button:hover { opacity:0.95 }
+
+      #suggestions {
+        margin-top:20px;
+        padding:20px;
+        background: rgba(255,255,255,0.01);
+        border-radius:8px;
+        white-space:pre-line;
+        line-height:1.6;
+        border-left:4px solid rgba(110,231,183,0.18);
+        color: rgba(241, 237, 237, 0.784);
+      }
+
+      .button-group{
+        display:flex;
+        gap:10px;
+        margin-top:20px;
+      }
+      .button-group button{
+        flex:1;
+        background: rgba(255,255,255,0.01);
+        color: var(--accent);
+        border:1px solid rgba(110,231,183,0.12);
+        padding:10px;
+        border-radius:8px;
+      }
+      .button-group button:hover{ background: rgba(110,231,183,0.08); color: #042 }
+
+      @media (max-width:900px){
+        .sidebar{display:none}
+        .content{margin-left:24px;padding:24px}
+      }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation (colors matched to project ideas) -->
+    <div class="sidebar">
+        <div class="logo">CG</div>
+        <h2>CareerCanvas</h2>
+        <p>Design your path — build your future.</p>
+        <small style="color:rgba(233, 226, 226, 0.882);margin-top:auto">Resume · Internships · Roadmaps</small>
+        <div style="width:100%;border-top:1px solid rgba(110,231,183,0.08);margin:12px 0;"></div>
+
+        <a href="dashboard.html">🏠 Home</a>
+        <a href="add_goal.html">➕ Add Goal</a>
+        <a href="goals_list.html">📋 View Goals</a>
+        <a href="career_suggestions.html">💡 Career Suggestions</a>
+        <a href="roadmap_generator.html">🛣️ Roadmap Generator</a>
+        <a href="skills_recommendation.html">🎯 Skills Recommendation</a>
+        <a href="project_ideas.html">🚀 Project Ideas</a>
+        <a href="internship_alerts.html">💼 Internship Alerts</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h2 class="page-title">Skills Recommendation System</h2>
+
+        <div class="form-container">
+            <label for="branch">Select Your Branch:</label>
+            <select id="branch" class="branch-select">
+                <option value="">-- Choose Branch --</option>
+                <option value="CSE">CSE (Computer Science)</option>
+                <option value="IT">IT (Information Technology)</option>
+                <option value="ECE">ECE (Electronics & Communication)</option>
+                <option value="EE">EE (Electrical)</option>
+                <option value="ME">ME (Mechanical)</option>
+                <option value="CE">CE (Civil)</option>
+                <option value="CHE">CHE (Chemical)</option>
+                <option value="BT">BT (Biotechnology)</option>
+                <option value="MBA">MBA / Management</option>
+                <option value="OTHER">Other / Interdisciplinary</option>
+            </select>
+
+            <button id="recommendBtn">Get Recommendations</button>
+
+            <div id="suggestions">
+                Select a branch and click "Get Recommendations" to see suggested skills.
+            </div>
+
+            <div class="button-group">
+                <button id="copyBtn">Copy to Clipboard</button>
+                <button id="downloadBtn">Download as Text</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="skills_recommendation.js"></script>
+</body>
+</html>

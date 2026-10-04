@@ -1,0 +1,275 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 8px;
+}
+
+header p {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.builder-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    min-height: 80vh;
+}
+
+.form-section {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    max-height: 85vh;
+}
+
+.preview-section {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    max-height: 85vh;
+}
+
+fieldset {
+    border: none;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+fieldset:last-of-type {
+    border-bottom: none;
+}
+
+legend {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #0066cc;
+    margin-bottom: 15px;
+    display: block;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 0.95em;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 8px rgba(0, 102, 204, 0.2);
+}
+
+.experience-item,
+.project-item {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    border: 1px solid #eee;
+}
+
+.remove-exp-btn,
+.remove-proj-btn {
+    background: #ff4444;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    width: 100%;
+}
+
+.remove-exp-btn:hover,
+.remove-proj-btn:hover {
+    background: #cc0000;
+}
+
+#addExpBtn,
+#addProjBtn {
+    background: #0066cc;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#addExpBtn:hover,
+#addProjBtn:hover {
+    background: #0052a3;
+}
+
+.form-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.95em;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#previewBtn {
+    background: #0066cc;
+    color: white;
+}
+
+#previewBtn:hover {
+    background: #0052a3;
+}
+
+#downloadBtn {
+    background: #28a745;
+    color: white;
+}
+
+#downloadBtn:hover {
+    background: #218838;
+}
+
+.form-actions button[type="reset"] {
+    background: #6c757d;
+    color: white;
+}
+
+.form-actions button[type="reset"]:hover {
+    background: #5a6268;
+}
+
+/* Resume Preview Styles */
+.resume-preview {
+    background: white;
+    padding: 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
+}
+
+.resume-header {
+    text-align: center;
+    border-bottom: 2px solid #0066cc;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.resume-name {
+    font-size: 2em;
+    font-weight: bold;
+    color: #0066cc;
+    margin-bottom: 8px;
+}
+
+.resume-contact {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.resume-section {
+    margin-bottom: 20px;
+}
+
+.resume-section-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #0066cc;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.resume-item {
+    margin-bottom: 12px;
+}
+
+.resume-item-title {
+    font-weight: bold;
+    color: #333;
+}
+
+.resume-item-subtitle {
+    color: #666;
+    font-size: 0.95em;
+}
+
+.resume-item-description {
+    color: #555;
+    font-size: 0.95em;
+    margin-top: 5px;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-tag {
+    background: #f0f8ff;
+    padding: 5px 12px;
+    border-radius: 15px;
+    border: 1px solid #0066cc;
+    font-size: 0.9em;
+    color: #0066cc;
+}
+
+@media (max-width: 1024px) {
+    .builder-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-section,
+    .preview-section {
+        max-height: none;
+    }
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register - Career Guidance</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Student Registration</h2>
+  <form action="register.php" method="POST">
+    <input type="text" name="name" placeholder="Full Name" required><br>
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="password" name="password" placeholder="Password" required><br>
+    <input type="text" name="phone" placeholder="Phone" required><br>
+    <button type="submit">Register</button>
+  </form>
+  <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("status") === "success") {
+    alert("🎉 Registration successful!");
+  } else if (urlParams.get("status") === "error") {
+    alert("❌ Something went wrong. Please try again.");
+  }
+</script>
+
+</body>
+</html>
